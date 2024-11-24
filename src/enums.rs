@@ -17,7 +17,7 @@ macro_rules! winapi_enum {
     ($t:ident, $doc:expr => [$($v:ident = $val:expr),*]) => {
         #[doc=$doc]
         #[allow(non_camel_case_types)]
-        #[derive(Debug, PartialEq, Clone)]
+        #[derive(Debug, Clone, PartialEq)]
         pub enum $t {
             $(
                 #[doc = $doc]
