@@ -13,35 +13,48 @@ pub use windows_sys::Win32::System::Registry::{
     KEY_WOW64_32KEY, KEY_WOW64_64KEY, KEY_WOW64_RES, KEY_WRITE, REG_PROCESS_APPKEY,
 };
 
-macro_rules! winapi_enum{
-    ($t:ident, $doc:expr => [$($v:ident),*]) => (
+macro_rules! winapi_enum {
+    ($t:ident, $doc:expr => [$($v:ident = $val:expr),*]) => {
         #[doc=$doc]
         #[allow(non_camel_case_types)]
-        #[derive(Debug,Clone,PartialEq)]
+        #[derive(Debug, PartialEq, Clone)]
         pub enum $t {
-            $( $v = windows_sys::Win32::System::Registry::$v as isize ),*
+            $(
+                #[doc = $doc]
+                $v = $val,
+            )*
         }
-    )
+    };
 }
 
+
+
+winapi_enum!(NotifyFilter, "Enumeration of possible changes that should be reported in RegNotifyChangeKeyValue" => [
+    REG_NOTIFY_CHANGE_NAME = 0x00000001,
+    REG_NOTIFY_CHANGE_ATTRIBUTES=0x00000002,
+    REG_NOTIFY_CHANGE_LAST_SET=0x00000004,
+    REG_NOTIFY_CHANGE_SECURITY=0x00000008,
+    REG_NOTIFY_THREAD_AGNOSTIC=0x10000000
+]);
+
 winapi_enum!(RegType, "Enumeration of possible registry value types" => [
-REG_NONE,
-REG_SZ,
-REG_EXPAND_SZ,
-REG_BINARY,
-REG_DWORD,
-REG_DWORD_BIG_ENDIAN,
-REG_LINK,
-REG_MULTI_SZ,
-REG_RESOURCE_LIST,
-REG_FULL_RESOURCE_DESCRIPTOR,
-REG_RESOURCE_REQUIREMENTS_LIST,
-REG_QWORD
+REG_NONE=0x0,
+REG_SZ=0x00000001,
+REG_EXPAND_SZ=0x00000002,
+REG_BINARY=0x00000003,
+REG_DWORD=0x00000004,
+REG_DWORD_BIG_ENDIAN=0x00000005,
+REG_LINK=0x00000006,
+REG_MULTI_SZ=0x00000007,
+REG_RESOURCE_LIST=0x00000008,
+REG_FULL_RESOURCE_DESCRIPTOR=0x00000009,
+REG_RESOURCE_REQUIREMENTS_LIST=0x0000000A,
+REG_QWORD=0x0000000B
 ]);
 pub use self::RegType::*;
 
 winapi_enum!(RegDisposition, "Enumeration of possible disposition values" => [
-REG_CREATED_NEW_KEY,
-REG_OPENED_EXISTING_KEY
+REG_CREATED_NEW_KEY=0x00000001,
+REG_OPENED_EXISTING_KEY=0x00000002
 ]);
 pub use self::RegDisposition::*;
